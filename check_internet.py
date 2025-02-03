@@ -37,8 +37,8 @@ def main():
         else:
             print("Internet connection is active.")
         
-        # Wait for 30 seconds before the next check
-        time.sleep(30)
+        # Wait for 120 seconds before the next check
+        time.sleep(120)
 
 if __name__ == "__main__":
     main()
