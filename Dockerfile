@@ -8,9 +8,6 @@ RUN apt-get update && apt-get install -y curl tzdata && apt-get clean && \
 # Set the working directory
 WORKDIR /app
 
-# Copy the script to the container
-COPY check_internet.py /app/check_internet.py
-
 # Install Python dependencies
 RUN pip install --no-cache-dir requests pytz
 
