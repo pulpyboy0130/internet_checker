@@ -2,6 +2,18 @@ import time
 import requests
 import socket
 import os
+import datetime
+import pytz
+
+# Set timezone to Asia/Kolkata
+IST = pytz.timezone("Asia/Kolkata")
+
+def log(message):
+    """
+    Log messages with an Asia/Kolkata timestamp for Portainer logs.
+    """
+    timestamp = datetime.datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S %Z")
+    print(f"[{timestamp}] {message}", flush=True)  # Flush ensures logs appear in real-time
 
 def check_internet(host="8.8.8.8", port=53, timeout=3):
     """
@@ -18,27 +30,29 @@ def notify_server(url):
     """
     Send a notification request to the specified URL.
     """
+    if not url:
+        log("No NOTIFY_URL set. Skipping notification.")
+        return
+    
     try:
         response = requests.get(url, timeout=5)
-        print(f"Notification sent: {response.status_code}")
+        log(f"Notification sent: {response.status_code}")
     except requests.RequestException as e:
-        print(f"Failed to send notification: {e}")
+        log(f"Failed to send notification: {e}")
 
 def main():
-    # Get the notification URL from the environment variable or use a default value
     url = os.getenv("NOTIFY_URL")
-    
-    print(f"Using notification URL: {url}")
+
+    log(f"Using notification URL: {url}")
 
     while True:
         if not check_internet():
-            print("No internet connection detected.")
+            log("No internet connection detected.")
             notify_server(url)
         else:
-            print("Internet connection is active.")
-        
-        # Wait for 120 seconds before the next check
-        time.sleep(120)
+            log("Internet connection is active.")
+
+        time.sleep(30)  # Wait for 30 seconds before the next check
 
 if __name__ == "__main__":
     main()
