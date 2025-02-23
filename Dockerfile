@@ -1,18 +1,19 @@
-FROM python:3.10-slim
+# Use an official Python runtime as the base image
+FROM python:3.9-slim
 
-# Set timezone and install dependencies
-ENV TZ=Asia/Kolkata
-RUN apt-get update && apt-get install -y curl tzdata && apt-get clean && \
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the script into the container
-COPY internet_checker.py /app
+# Copy the Python script to the container
+COPY net_check.py .
 
-# Install Python dependencies
+# Install required Python packages
 RUN pip install --no-cache-dir requests pytz
 
-# Run the script
-CMD ["python", "/app/check_internet.py"]
+# Set environment variables (optional defaults)
+ENV NOTIFY_URL=""
+ENV CHECK_INTERVAL=30
+ENV TIMEZONE="IST"
+
+# Run the script when the container launches
+CMD ["python", "net_check.py"]
