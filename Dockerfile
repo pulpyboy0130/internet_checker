@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir requests pytz
 # Set environment variables (optional defaults)
 ENV NOTIFY_URL=""
 ENV CHECK_INTERVAL=30
-ENV TIMEZONE="IST"
+ENV TIMEZONE="Asia/Kolkata"
 
 # Run the script when the container launches
 CMD ["python", "net_check.py"]
